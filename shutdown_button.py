@@ -9,15 +9,20 @@ use_button=27                       # lowest button on PiTFT+
 from gpiozero import Button
 from signal import pause
 from subprocess import check_call
+from subprocess import Popen
 
 held_for=0.0
 
 def rls():
         global held_for
-        if (held_for > 5.0):
+        if (held_for > 15.0):
                 check_call(['/sbin/poweroff'])
-        elif (held_for > 2.0):
+        elif (held_for > 10.0):
                 check_call(['/sbin/reboot'])
+        elif (held_for > 5.0):
+                Popen("sudo touch /root/.pwnagotchi-manu && sudo service pwnagotchi restart", shell=True)
+        elif (held_for > 1.0):
+                Popen("sudo touch /root/.pwnagotchi-auto && sudo service pwnagotchi restart", shell=True)
         else:
         	held_for = 0.0
 
